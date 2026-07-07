@@ -1,0 +1,25 @@
+name: BIST Tarayici
+
+on:
+  schedule:
+    - cron: '0 6 * * 1-5'
+    - cron: '0 13 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v3
+      - name: Python kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Kutuphaneleri yukle
+        run: pip install requests
+      - name: Tarayiciyi calistir
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python scanner.py
